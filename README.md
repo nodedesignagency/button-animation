@@ -22,7 +22,7 @@ scales as one unit:
 
 | State | What happens |
 | --- | --- |
-| Idle | Fires sway and breathe on slow offset clocks like a bonfire, a few embers rise |
+| Idle | Flame silhouettes slowly morph — a wave travels up each fire (SMIL path morphing), a few embers rise |
 | Hover / focus | Fires grow gently, glow and text shadow intensify, sheen sweeps the face, arrow slides right, button lifts, all embers release |
 | Click | One-shot flare: fires swell briefly, the face flashes warm |
 
@@ -43,8 +43,8 @@ Colors live in `:root`; size is one value on `.fire-btn`:
 ```
 
 Change `780px` to render the button larger or smaller — padding, radius, ring,
-fires and ember travel all follow. Label text lives in `.label`; flame sway speed is
-the `animation-duration` on `.flame-outer` / `.flame-inner`. Ember
+fires and ember travel all follow. Label text lives in `.label`; flame morph speed is
+the `dur` on the two `<animate>` elements inside each fire. Ember
 count and spread are set in the script at the bottom of the file.
 
 ## Notes
