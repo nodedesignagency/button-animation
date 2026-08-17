@@ -22,9 +22,9 @@ scales as one unit:
 
 | State | What happens |
 | --- | --- |
-| Idle | Three flame layers per fire flicker on desynced clocks, a few embers rise |
-| Hover / focus | Fires flare and speed up, glow and text shadow intensify, sheen sweeps the face, arrow slides right, button lifts, all embers release |
-| Click | One-shot flare: fires burst, the face flashes hot |
+| Idle | Fires sway and breathe on slow offset clocks like a bonfire, a few embers rise |
+| Hover / focus | Fires grow gently, glow and text shadow intensify, sheen sweeps the face, arrow slides right, button lifts, all embers release |
+| Click | One-shot flare: fires swell briefly, the face flashes warm |
 
 Keyboard focus (`Tab`) gets the same treatment as hover, plus a visible focus ring.
 
@@ -43,8 +43,8 @@ Colors live in `:root`; size is one value on `.fire-btn`:
 ```
 
 Change `780px` to render the button larger or smaller — padding, radius, ring,
-fires and ember travel all follow. Label text lives in `.label`; flame speed is
-the `animation-duration` on `.lick-outer` / `.lick-mid` / `.lick-core`. Ember
+fires and ember travel all follow. Label text lives in `.label`; flame sway speed is
+the `animation-duration` on `.flame-outer` / `.flame-inner`. Ember
 count and spread are set in the script at the bottom of the file.
 
 ## Notes

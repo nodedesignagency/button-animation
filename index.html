@@ -140,40 +140,31 @@
   .fire-right { right: -.62em; transform: scaleX(-1); }
 
   .fire-btn:hover .fire-left,
-  .fire-btn:focus-visible .fire-left { transform: scale(1.13); }
+  .fire-btn:focus-visible .fire-left { transform: scale(1.06); }
   .fire-btn:hover .fire-right,
-  .fire-btn:focus-visible .fire-right { transform: scaleX(-1) scale(1.13); }
+  .fire-btn:focus-visible .fire-right { transform: scaleX(-1) scale(1.06); }
 
-  /* Each layer licks on its own clock so the fire never looks looped. */
-  .fire g { transform-origin: 50% 92%; }
+  /* Bonfire motion: the two flame layers sway and breathe on slow, offset
+     clocks. Small amplitudes and long ease-in-out cycles — no bounce. */
+  .fire g { transform-origin: 50% 96%; }
 
-  .lick-outer { animation: lick-a 1.45s ease-in-out infinite; }
-  .lick-mid   { animation: lick-b  .95s ease-in-out infinite; }
-  .lick-core  { animation: lick-c  .7s  ease-in-out infinite; }
+  .flame-outer { animation: sway-outer 4.8s ease-in-out infinite; }
+  .flame-inner { animation: sway-inner 3.4s ease-in-out infinite; }
 
-  .fire-btn:hover .lick-outer, .fire-btn:focus-visible .lick-outer { animation-duration: .9s; }
-  .fire-btn:hover .lick-mid,   .fire-btn:focus-visible .lick-mid   { animation-duration: .6s; }
-  .fire-btn:hover .lick-core,  .fire-btn:focus-visible .lick-core  { animation-duration: .45s; }
+  /* Right fire runs on its own timing so the two sides never sync up. */
+  .fire-right .flame-outer { animation-duration: 5.6s; animation-delay: -2.3s; }
+  .fire-right .flame-inner { animation-duration: 3.9s; animation-delay: -1.4s; }
 
-  /* Right fire runs offset so the two sides never sync up. */
-  .fire-right .lick-outer { animation-delay: -.6s; }
-  .fire-right .lick-mid   { animation-delay: -.37s; }
-  .fire-right .lick-core  { animation-delay: -.22s; }
-
-  @keyframes lick-a {
-    0%, 100% { transform: scale(1, 1)       skewX(0deg); }
-    30%      { transform: scale(.96, 1.06)  skewX(-2.5deg); }
-    60%      { transform: scale(1.04, .96)  skewX(2deg); }
+  @keyframes sway-outer {
+    0%, 100% { transform: rotate(-1deg)  scale(1, 1); }
+    28%      { transform: rotate(.7deg)  scale(1.005, 1.02); }
+    52%      { transform: rotate(-.3deg) scale(1, 1.035); }
+    76%      { transform: rotate(.9deg)  scale(1.005, 1.012); }
   }
-  @keyframes lick-b {
-    0%, 100% { transform: scale(1, 1)      skewX(1.5deg); }
-    35%      { transform: scale(1.05, .93) skewX(-3deg); }
-    70%      { transform: scale(.94, 1.09) skewX(3deg); }
-  }
-  @keyframes lick-c {
-    0%, 100% { transform: scale(1, 1);        opacity: .95; }
-    45%      { transform: scale(.9, 1.14);    opacity: 1; }
-    80%      { transform: scale(1.06, .92);   opacity: .88; }
+  @keyframes sway-inner {
+    0%, 100% { transform: rotate(1.1deg) scale(1, 1)      translateY(0); }
+    30%      { transform: rotate(-.9deg) scale(.99, 1.045) translateY(-10px); }
+    62%      { transform: rotate(.5deg)  scale(1.01, 1.015) translateY(4px); }
   }
 
   /* ---------------------------------------------------------------
@@ -219,18 +210,18 @@
 
   @keyframes flare {
     0%   { transform: scale(1); }
-    35%  { transform: scale(1.35); }
+    40%  { transform: scale(1.14); }
     100% { transform: scale(1); }
   }
   .fire-btn.burst .fire-right { animation-name: flare-mirrored; }
   @keyframes flare-mirrored {
     0%   { transform: scaleX(-1) scale(1); }
-    35%  { transform: scaleX(-1) scale(1.35); }
+    40%  { transform: scaleX(-1) scale(1.14); }
     100% { transform: scaleX(-1) scale(1); }
   }
   @keyframes scorch {
     0%   { filter: brightness(1); }
-    25%  { filter: brightness(1.55) saturate(1.3); }
+    30%  { filter: brightness(1.35) saturate(1.2); }
     100% { filter: brightness(1); }
   }
 
@@ -257,57 +248,41 @@
 
   <span class="embers" aria-hidden="true"></span>
 
-  <!-- Left fire -->
-  <svg class="fire fire-left" viewBox="0 0 100 100" aria-hidden="true">
+  <!-- Left fire (emoji-traced: outer #FB4038->#FFA10E, inner #FFEF76->#FFB026) -->
+  <svg class="fire fire-left" viewBox="0 0 1000 1000" aria-hidden="true">
     <defs>
-      <linearGradient id="fgOuter" x1="0" y1="1" x2="0" y2="0">
-        <stop offset="0%" stop-color="#f0541e" />
-        <stop offset="100%" stop-color="#ffa42a" />
+      <linearGradient id="fOuter" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#FB4038" />
+        <stop offset="100%" stop-color="#FFA10E" />
       </linearGradient>
-      <linearGradient id="fgMid" x1="0" y1="1" x2="0" y2="0">
-        <stop offset="0%" stop-color="#ffa61e" />
-        <stop offset="100%" stop-color="#ffd05a" />
+      <linearGradient id="fInner" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#FFEF76" />
+        <stop offset="85%" stop-color="#FFB026" />
       </linearGradient>
-      <linearGradient id="fgCore" x1="0" y1="1" x2="0" y2="0">
-        <stop offset="0%" stop-color="#ffedad" />
-        <stop offset="100%" stop-color="#fff8dc" />
-      </linearGradient>
+      <radialGradient id="fGlow" cx="50%" cy="84%" r="42%">
+        <stop offset="0%" stop-color="#FFF9E0" />
+        <stop offset="55%" stop-color="#FFF3C4" stop-opacity=".75" />
+        <stop offset="100%" stop-color="#FFF3C4" stop-opacity="0" />
+      </radialGradient>
     </defs>
 
-    <g class="lick-outer">
-      <!-- red rim, slightly larger than the orange body -->
-      <path fill="#e0391c"
-            d="M50 99C26 99 10 84 10 64 10 49 19 39 26 30c5-6 8-13 5-21 10 4 15 11 17 18 3-9 9-19 7-27 16 10 35 31 35 58 0 26-16 21-40 21Z" />
-      <path fill="url(#fgOuter)"
-            d="M50 97C28 97 13 83 13 64c0-14 8-23 15-32 5-6 8-13 6-20 8 4 13 10 15 17 3-9 8-19 7-27 14 10 31 30 31 56 0 24-15 39-37 39Z" />
+    <g class="flame-outer">
+      <path fill="url(#fOuter)" d="M500 973C310 973 105 856 105 645 105 520 168 468 206 406 230 366 246 320 252 282 285 350 305 415 315 468 335 400 385 235 410 120 416 85 424 45 432 12 505 90 578 170 628 268 662 330 674 400 652 462 700 455 775 440 834 441 872 492 893 570 893 652 893 856 690 973 500 973Z" />
     </g>
-
-    <g class="lick-mid">
-      <path fill="url(#fgMid)"
-            d="M50 97c-16 0-26-9-26-23 0-11 6-18 12-26 4-5 6-11 5-17 7 5 11 11 12 17 3-6 4-12 3-18 11 11 20 23 20 38 0 18-11 29-26 29Z" />
-    </g>
-
-    <g class="lick-core">
-      <path fill="url(#fgCore)"
-            d="M50 97c-10 0-16-6-16-15 0-7 4-12 8-17 3-4 4-8 3-12 6 5 9 10 10 15 2-4 3-7 2-11 5 6 9 13 9 21 0 11-7 19-16 19Z" />
+    <g class="flame-inner">
+      <path fill="url(#fInner)" d="M505 950C395 950 295 865 295 745 295 692 312 660 334 630 324 610 326 592 340 576 352 548 372 515 400 482 450 428 535 390 570 348 588 425 625 495 660 575 698 662 704 758 662 838 625 905 572 950 505 950Z" />
+      <path fill="url(#fGlow)" d="M505 950C395 950 295 865 295 745 295 692 312 660 334 630 324 610 326 592 340 576 352 548 372 515 400 482 450 428 535 390 570 348 588 425 625 495 660 575 698 662 704 758 662 838 625 905 572 950 505 950Z" />
     </g>
   </svg>
 
   <!-- Right fire (mirrored via CSS) -->
-  <svg class="fire fire-right" viewBox="0 0 100 100" aria-hidden="true">
-    <g class="lick-outer">
-      <path fill="#e0391c"
-            d="M50 99C26 99 10 84 10 64 10 49 19 39 26 30c5-6 8-13 5-21 10 4 15 11 17 18 3-9 9-19 7-27 16 10 35 31 35 58 0 26-16 21-40 21Z" />
-      <path fill="url(#fgOuter)"
-            d="M50 97C28 97 13 83 13 64c0-14 8-23 15-32 5-6 8-13 6-20 8 4 13 10 15 17 3-9 8-19 7-27 14 10 31 30 31 56 0 24-15 39-37 39Z" />
+  <svg class="fire fire-right" viewBox="0 0 1000 1000" aria-hidden="true">
+    <g class="flame-outer">
+      <path fill="url(#fOuter)" d="M500 973C310 973 105 856 105 645 105 520 168 468 206 406 230 366 246 320 252 282 285 350 305 415 315 468 335 400 385 235 410 120 416 85 424 45 432 12 505 90 578 170 628 268 662 330 674 400 652 462 700 455 775 440 834 441 872 492 893 570 893 652 893 856 690 973 500 973Z" />
     </g>
-    <g class="lick-mid">
-      <path fill="url(#fgMid)"
-            d="M50 97c-16 0-26-9-26-23 0-11 6-18 12-26 4-5 6-11 5-17 7 5 11 11 12 17 3-6 4-12 3-18 11 11 20 23 20 38 0 18-11 29-26 29Z" />
-    </g>
-    <g class="lick-core">
-      <path fill="url(#fgCore)"
-            d="M50 97c-10 0-16-6-16-15 0-7 4-12 8-17 3-4 4-8 3-12 6 5 9 10 10 15 2-4 3-7 2-11 5 6 9 13 9 21 0 11-7 19-16 19Z" />
+    <g class="flame-inner">
+      <path fill="url(#fInner)" d="M505 950C395 950 295 865 295 745 295 692 312 660 334 630 324 610 326 592 340 576 352 548 372 515 400 482 450 428 535 390 570 348 588 425 625 495 660 575 698 662 704 758 662 838 625 905 572 950 505 950Z" />
+      <path fill="url(#fGlow)" d="M505 950C395 950 295 865 295 745 295 692 312 660 334 630 324 610 326 592 340 576 352 548 372 515 400 482 450 428 535 390 570 348 588 425 625 495 660 575 698 662 704 758 662 838 625 905 572 950 505 950Z" />
     </g>
   </svg>
 
@@ -326,7 +301,7 @@
     e.className = 'ember';
     e.style.setProperty('--x', (min + Math.random() * (max - min)).toFixed(2) + '%');
     e.style.setProperty('--size', (3 + Math.random() * 6).toFixed(1) + 'px');
-    e.style.setProperty('--dur', (1.6 + Math.random() * 2.2).toFixed(2) + 's');
+    e.style.setProperty('--dur', (2.4 + Math.random() * 2.4).toFixed(2) + 's');
     e.style.setProperty('--delay', (-Math.random() * 3).toFixed(2) + 's');
     e.style.setProperty('--drift', (Math.random() * 40 - 20).toFixed(1) + 'px');
     embers.appendChild(e);
