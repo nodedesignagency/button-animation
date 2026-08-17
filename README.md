@@ -1,42 +1,51 @@
 # Fire Button
 
-An animated "GET IN TOUCH" button — dark pill, gradient ember ring, and custom
-SVG flames licking up both sides. Single self-contained `index.html`: no build,
-no dependencies, no network calls (the pixel font is inlined).
+An animated "GET IN TOUCH" button on a white page — dark pill in a red-to-amber
+gradient frame, with two fires burning at the bottom corners. Single
+self-contained `index.html`: no build, no dependencies, no network calls
+(the pixel font is inlined).
 
 Open `index.html` in a browser.
+
+## Design spec
+
+Built from the Figma frames, with 1em = 100 design px so the whole button
+scales as one unit:
+
+| Piece | Spec |
+| --- | --- |
+| Outer frame | 1244 × 335, gradient top `#D84C38` → bottom `#E7983B` |
+| Inner frame | 1200 × 327, solid `#371F0F` |
+| Fires | 243 × 243, bottom-left and bottom-right corners, in front of the button |
 
 ## States
 
 | State | What happens |
 | --- | --- |
-| Idle | Flames flicker on four desynced clocks, ring gradient drifts, a few embers rise |
-| Hover / focus | Fire flares and speeds up, glow and text shadow intensify, sheen sweeps the face, arrow slides right, button lifts, all embers release |
-| Click | One-shot flare: flames burst outward, the face flashes hot |
+| Idle | Three flame layers per fire flicker on desynced clocks, a few embers rise |
+| Hover / focus | Fires flare and speed up, glow and text shadow intensify, sheen sweeps the face, arrow slides right, button lifts, all embers release |
+| Click | One-shot flare: fires burst, the face flashes hot |
 
 Keyboard focus (`Tab`) gets the same treatment as hover, plus a visible focus ring.
 
 ## Customizing
 
-Everything is driven by tokens in `:root` and one font size on `.fire-btn`:
+Colors live in `:root`; size is one value on `.fire-btn`:
 
 ```css
 :root {
-  --bg: #f2f2f2;          /* page background        */
-  --btn-top: #4d2415;     /* face gradient, top     */
-  --btn-bottom: #2a1007;  /* face gradient, bottom  */
-  --ember-red / --ember-orange / --ember-amber / --ember-gold / --ember-core;
+  --ring-top: #d84c38;     /* outer frame gradient, 0%   */
+  --ring-bottom: #e7983b;  /* outer frame gradient, 100% */
+  --face: #371f0f;         /* inner frame                */
 }
 
-.fire-btn { font-size: clamp(15px, 3.6vw, 40px); }
+.fire-btn { font-size: min(calc(780px / 12.44), calc((100vw - 44px) / 12.44)); }
 ```
 
-The button's padding, corner radius, ring width, flame size and ember travel are
-all expressed in `em`, so changing that one `font-size` rescales the whole thing
-as a unit. Label text lives in `.label`; flame speed is the `animation-duration`
-on `.lick-outer` / `.lick-mid` / `.lick-inner` / `.lick-core`.
-
-Ember count and spread are set in the script at the bottom of the file.
+Change `780px` to render the button larger or smaller — padding, radius, ring,
+fires and ember travel all follow. Label text lives in `.label`; flame speed is
+the `animation-duration` on `.lick-outer` / `.lick-mid` / `.lick-core`. Ember
+count and spread are set in the script at the bottom of the file.
 
 ## Notes
 
