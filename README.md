@@ -14,6 +14,7 @@ scales as one unit:
 
 | Piece | Spec |
 | --- | --- |
+| Page | `#f5f5f5` (`--page`) |
 | Outer frame | 1244 × 335, gradient top `#D84C38` → bottom `#E7983B` |
 | Inner frame | 1200 × 327, solid `#371F0F` |
 | Fires | ~260 × 260 box, bottom-left and bottom-right corners, in front of the button |
@@ -23,8 +24,9 @@ scales as one unit:
 | State | What happens |
 | --- | --- |
 | Idle | Real animated-emoji fire — seven layers licking, the two sides out of phase. Detaching tongues fade out just above the flame; a few embers drift up |
-| Hover / focus | Fires grow gently, glow and text shadow intensify, sheen sweeps the face, arrow slides right, button lifts, all embers release |
-| Click | Fires turn fierce — the flame timeline runs ~3x for a beat, both fires swell, the face flashes, and burning bits spill out and fall away to the left and right |
+| Hover / focus | Button lifts with a springy overshoot, the grounding shadow grows, fires and glow intensify, sheen sweeps the face, arrow slides right, all embers release |
+| Press | Button depresses under the pointer and the shadow tightens beneath it; releasing springs it back past its resting point |
+| Click | The arrow launches off to the right and returns from the left, fires turn fierce — the flame timeline runs ~3x for a beat, both fires swell, the face flashes, and burning bits spill out and fall away to the left and right |
 
 Keyboard focus (`Tab`) gets the same treatment as hover, plus a visible focus ring.
 

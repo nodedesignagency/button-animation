@@ -56,7 +56,8 @@
        the ~1.45em each side reached by the fires and, on click, the spill. */
     font-size: min(calc(780px / 12.44), calc((100vw - 16px) / 15.34));
     transform: translateZ(0);
-    transition: transform .28s cubic-bezier(.2, .9, .25, 1.2), filter .3s ease;
+    /* back-out curve: the release overshoots and settles instead of gliding */
+    transition: transform .42s cubic-bezier(.34, 1.56, .64, 1), filter .3s ease;
     filter:
       drop-shadow(0 .12em .3em rgba(140, 60, 20, calc(.16 + .14 * var(--heat))))
       drop-shadow(0 0 calc(.2em + .35em * var(--heat)) rgba(255, 120, 35, calc(.18 + .38 * var(--heat))));
@@ -67,7 +68,13 @@
 
   .fire-btn:focus-visible { outline: 2px dashed var(--ring-bottom); outline-offset: 12px; }
 
-  .fire-btn:active { transform: translateY(.02em) scale(.99); transition-duration: .08s; }
+  /* Press physics. Driven by a class rather than :active so the spring-back
+     outlives the pointerup — that release is where the tactility lives. */
+  .fire-btn.pressing {
+    transform: translateY(.045em) scale(.972);
+    transition-duration: .09s;
+    transition-timing-function: cubic-bezier(.4, 0, 1, 1);
+  }
 
   /* Outer frame 1244x335, ring = (1244-1200)/2 x (335-327)/2 = 22 x 4.
      The gradient paints the border-box, the face paints the padding-box. */
@@ -87,6 +94,24 @@
       linear-gradient(180deg, var(--ring-top) 0%, var(--ring-bottom) 100%) border-box;
     overflow: hidden;
     isolation: isolate;
+    /* neutral shadow underneath: the warm filter glow reads as emitted light,
+       this reads as weight. It tightens as the button is pressed down. */
+    box-shadow:
+      0 .10em .22em rgba(70, 35, 12, .16),
+      0 .02em .05em rgba(70, 35, 12, .10);
+    transition: box-shadow .42s cubic-bezier(.34, 1.56, .64, 1);
+  }
+
+  .fire-btn:hover .face,
+  .fire-btn:focus-visible .face {
+    box-shadow:
+      0 .20em .42em rgba(70, 35, 12, .20),
+      0 .04em .10em rgba(70, 35, 12, .12);
+  }
+
+  .fire-btn.pressing .face {
+    box-shadow: 0 .03em .08em rgba(70, 35, 12, .24);
+    transition-duration: .09s;
   }
 
   /* Heat sheen that sweeps the face on hover. */
@@ -122,6 +147,17 @@
   }
   .fire-btn:hover .arrow,
   .fire-btn:focus-visible .arrow { transform: translateX(.16em); }
+
+  /* Shoots off to the right and returns from the left. */
+  .fire-btn.launch .arrow { animation: arrow-launch .52s cubic-bezier(.3, 0, .2, 1); }
+
+  @keyframes arrow-launch {
+    0%   { transform: translateX(0);      opacity: 1; }
+    24%  { transform: translateX(.9em);   opacity: 0; }
+    25%  { transform: translateX(-.55em); opacity: 0; }
+    55%  { opacity: 1; }
+    100% { transform: translateX(0);      opacity: 1; }
+  }
 
   /* ---------------------------------------------------------------
      Fires — 243x243, sitting on the bottom corners IN FRONT of the
@@ -252,7 +288,7 @@
      Reduced motion — keep the look, drop the loops
   --------------------------------------------------------------- */
   @media (prefers-reduced-motion: reduce) {
-    .fire-btn, .ember, .face::after, .shard { animation: none !important; }
+    .fire-btn, .ember, .face::after, .shard, .arrow { animation: none !important; }
     .ember { opacity: .7; }
   }
 </style>
@@ -387,11 +423,30 @@
     requestAnimationFrame(step);
   }
 
+  // --- press physics -----------------------------------------------------
+  // Driven by a class rather than :active so the spring-back outlives the
+  // pointerup. pointercancel and leaving while held both release, so the
+  // button can never stick down.
+  const press = () => btn.classList.add('pressing');
+  const release = () => btn.classList.remove('pressing');
+  btn.addEventListener('pointerdown', press);
+  btn.addEventListener('pointerup', release);
+  btn.addEventListener('pointercancel', release);
+  btn.addEventListener('pointerleave', release);
+  // keyboard activation gets the same press, so Space/Enter feels like a click
+  btn.addEventListener('keydown', (e) => {
+    if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) press();
+  });
+  btn.addEventListener('keyup', (e) => {
+    if (e.key === ' ' || e.key === 'Enter') release();
+  });
+  btn.addEventListener('blur', release);
+
   // The spill outlasts the flare and the scorch flash, so the class is held
   // for the longest of them — dropping it on the first animationend would
   // cut the shards off mid-flight.
   const BURST_MS = 1300;
-  let burstTimer;
+  let burstTimer, launchTimer;
   btn.addEventListener('click', () => {
     btn.classList.remove('burst');
     void btn.offsetWidth; // restart the animation
@@ -400,6 +455,13 @@
     if (!calm.matches) fires.forEach((f) => burnFierce(f));
     clearTimeout(burstTimer);
     burstTimer = setTimeout(() => btn.classList.remove('burst'), BURST_MS);
+
+    // the arrow launches on release — our equivalent of the star popping
+    btn.classList.remove('launch');
+    void btn.offsetWidth;
+    btn.classList.add('launch');
+    clearTimeout(launchTimer);
+    launchTimer = setTimeout(() => btn.classList.remove('launch'), 540);
   });
 
   // The flame morph is SMIL, which CSS media queries can't reach.
