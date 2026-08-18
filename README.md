@@ -22,9 +22,9 @@ scales as one unit:
 
 | State | What happens |
 | --- | --- |
-| Idle | Real animated-emoji fire — seven layers licking, tongues detaching and rising, the two sides out of phase; a few embers drift up |
+| Idle | Real animated-emoji fire — seven layers licking, the two sides out of phase. Detaching tongues fade out just above the flame; a few embers drift up |
 | Hover / focus | Fires grow gently, glow and text shadow intensify, sheen sweeps the face, arrow slides right, button lifts, all embers release |
-| Click | One-shot flare: fires swell briefly, the face flashes warm |
+| Click | Fires turn fierce — the flame timeline runs ~3x for a beat, both fires swell, the face flashes, and burning bits spill out and fall away to the left and right |
 
 Keyboard focus (`Tab`) gets the same treatment as hover, plus a visible focus ring.
 
@@ -39,13 +39,13 @@ Colors live in `:root`; size is one value on `.fire-btn`:
   --face: #371f0f;         /* inner frame                */
 }
 
-.fire-btn { font-size: min(calc(780px / 12.44), calc((100vw - 44px) / 12.44)); }
+.fire-btn { font-size: min(calc(780px / 12.44), calc((100vw - 16px) / 15.34)); }
 ```
 
 Change `780px` to render the button larger or smaller — padding, radius, ring,
 fires and ember travel all follow. Label text lives in `.label`; flame speed is the `dur` on the `<animate>`
-elements inside each fire (2.6s per loop). Ember count and spread are set in
-the script at the bottom of the file.
+elements inside each fire (2.6s per loop). Ember drift, and the click spill's
+size, spread and fall, are set in the script at the bottom of the file.
 
 ## Notes
 
