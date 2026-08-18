@@ -16,13 +16,13 @@ scales as one unit:
 | --- | --- |
 | Outer frame | 1244 × 335, gradient top `#D84C38` → bottom `#E7983B` |
 | Inner frame | 1200 × 327, solid `#371F0F` |
-| Fires | 243 × 243, bottom-left and bottom-right corners, in front of the button |
+| Fires | ~260 × 260 box, bottom-left and bottom-right corners, in front of the button |
 
 ## States
 
 | State | What happens |
 | --- | --- |
-| Idle | Flame silhouettes slowly morph — a wave travels up each fire (SMIL path morphing), a few embers rise |
+| Idle | Real animated-emoji fire — seven layers licking, tongues detaching and rising, the two sides out of phase; a few embers drift up |
 | Hover / focus | Fires grow gently, glow and text shadow intensify, sheen sweeps the face, arrow slides right, button lifts, all embers release |
 | Click | One-shot flare: fires swell briefly, the face flashes warm |
 
@@ -43,11 +43,12 @@ Colors live in `:root`; size is one value on `.fire-btn`:
 ```
 
 Change `780px` to render the button larger or smaller — padding, radius, ring,
-fires and ember travel all follow. Label text lives in `.label`; flame morph speed is
-the `dur` on the two `<animate>` elements inside each fire. Ember
-count and spread are set in the script at the bottom of the file.
+fires and ember travel all follow. Label text lives in `.label`; flame speed is the `dur` on the `<animate>`
+elements inside each fire (2.6s per loop). Ember count and spread are set in
+the script at the bottom of the file.
 
 ## Notes
 
 - `prefers-reduced-motion: reduce` keeps the visual design but stops every loop.
+- Fire: keyframes baked from Google's [Noto animated emoji](https://googlefonts.github.io/noto-emoji-animation/) (CC BY 4.0), resolved to flat SVG paths — no runtime library. `fire-emoji-frames.svg` is the standalone flame.
 - Font: [Silkscreen](https://fonts.google.com/specimen/Silkscreen) by Jason Kottke, SIL Open Font License 1.1, embedded as base64 woff2.
