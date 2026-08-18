@@ -57,21 +57,21 @@
     font-size: min(calc(780px / 12.44), calc((100vw - 16px) / 15.34));
     transform: translateZ(0);
     /* back-out curve: the release overshoots and settles instead of gliding */
-    transition: transform .42s cubic-bezier(.34, 1.56, .64, 1), filter .3s ease;
+    transition: transform .55s cubic-bezier(.18, 1.85, .45, 1), filter .3s ease;
     filter:
       drop-shadow(0 .12em .3em rgba(140, 60, 20, calc(.16 + .14 * var(--heat))))
       drop-shadow(0 0 calc(.2em + .35em * var(--heat)) rgba(255, 120, 35, calc(.18 + .38 * var(--heat))));
   }
 
   .fire-btn:hover,
-  .fire-btn:focus-visible { --heat: 1; transform: translateY(-.05em) scale(1.015); }
+  .fire-btn:focus-visible { --heat: 1; transform: translateY(-.13em) scale(1.03); }
 
   .fire-btn:focus-visible { outline: 2px dashed var(--ring-bottom); outline-offset: 12px; }
 
   /* Press physics. Driven by a class rather than :active so the spring-back
      outlives the pointerup — that release is where the tactility lives. */
   .fire-btn.pressing {
-    transform: translateY(.045em) scale(.972);
+    transform: translateY(.09em) scale(.945);
     transition-duration: .09s;
     transition-timing-function: cubic-bezier(.4, 0, 1, 1);
   }
@@ -97,20 +97,20 @@
     /* neutral shadow underneath: the warm filter glow reads as emitted light,
        this reads as weight. It tightens as the button is pressed down. */
     box-shadow:
-      0 .10em .22em rgba(70, 35, 12, .16),
-      0 .02em .05em rgba(70, 35, 12, .10);
-    transition: box-shadow .42s cubic-bezier(.34, 1.56, .64, 1);
+      0 .16em .34em rgba(52, 24, 8, .30),
+      0 .04em .09em rgba(52, 24, 8, .20);
+    transition: box-shadow .55s cubic-bezier(.18, 1.85, .45, 1);
   }
 
   .fire-btn:hover .face,
   .fire-btn:focus-visible .face {
     box-shadow:
-      0 .20em .42em rgba(70, 35, 12, .20),
-      0 .04em .10em rgba(70, 35, 12, .12);
+      0 .40em .70em rgba(52, 24, 8, .34),
+      0 .10em .20em rgba(52, 24, 8, .22);
   }
 
   .fire-btn.pressing .face {
-    box-shadow: 0 .03em .08em rgba(70, 35, 12, .24);
+    box-shadow: 0 .02em .06em rgba(52, 24, 8, .42);
     transition-duration: .09s;
   }
 
