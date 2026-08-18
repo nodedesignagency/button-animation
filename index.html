@@ -23,6 +23,7 @@
     --ring-top: #d84c38;     /* outer frame gradient, 0%   */
     --ring-bottom: #e7983b;  /* outer frame gradient, 100% */
     --face: #371f0f;         /* inner frame                */
+    --page: #f5f5f5;         /* page behind the button     */
     --heat: 0;               /* 0 at rest, 1 on hover      */
   }
 
@@ -34,7 +35,7 @@
     margin: 0;
     display: grid;
     place-items: center;
-    background: #ffffff;
+    background: var(--page);
     font-family: 'Silkscreen', 'Courier New', ui-monospace, monospace;
     overflow: hidden;
   }
